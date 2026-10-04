@@ -1,0 +1,14 @@
+=========================================
+CAMPUSHUB - LABORATORY SAFETY GUIDELINES
+=========================================
+1. Workstation Hygiene:
+   - Always log out of shared portal accounts before leaving the laboratory.
+   - Do not plug unauthorized USB drives into laboratory workstations.
+
+2. Network & Testing Policy:
+   - Testing security tools is strictly restricted to designated isolated targets.
+   - Respect peer privacy and adhere to the institutional code of conduct.
+
+3. Assignment Submissions:
+   - Ensure all coursework uploads meet designated file formats (.pdf, .txt, .docx).
+   - Report any portal irregularities to admin@campushub.local immediately.

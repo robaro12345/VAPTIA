@@ -1,0 +1,63 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: campushub_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: campushub_user
+      POSTGRES_PASSWORD: campushub_pass
+      POSTGRES_DB: campushub_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U campushub_user -d campushub_db"]
+      interval: 3s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: campushub_backend
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      APP_VERSION: ${APP_VERSION:-v1}
+      PORT: 5000
+      NODE_ENV: development
+      DATABASE_URL: postgresql://campushub_user:campushub_pass@postgres:5432/campushub_db?schema=public
+      JWT_SECRET: ${JWT_SECRET:-campushub_lab_jwt_super_secret_key_v1_lab}
+      CORS_ORIGIN: http://localhost:3000
+      STORAGE_DOCUMENTS_DIR: /app/storage/documents
+      STORAGE_UPLOADS_DIR: /app/storage/uploads
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./storage:/app/storage
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_API_VERSION: ${NEXT_PUBLIC_API_VERSION:-v1}
+        NEXT_PUBLIC_API_URL: http://localhost:5000
+    container_name: campushub_frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    environment:
+      NEXT_PUBLIC_API_VERSION: ${NEXT_PUBLIC_API_VERSION:-v1}
+      NEXT_PUBLIC_API_URL: http://localhost:5000
+    ports:
+      - "3000:3000"
+
+volumes:
+  postgres_data:

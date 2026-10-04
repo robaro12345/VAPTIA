@@ -1,0 +1,9 @@
+=======================================================
+CAMPUSHUB CYBERSECURITY LABORATORY - HARMFREE AUDIT TARGET
+=======================================================
+FLAG: FLAG{campushub_path_traversal_verified_2026}
+Location: /app/storage/lab_flag.txt
+Description: If you are reading this file via GET /api/v1/documents/..%2flab_flag.txt,
+you have successfully verified the Path Traversal vulnerability (CWE-22) in V1!
+Remediation: V2 strictly canonicalizes paths and validates directory boundaries.
+=======================================================
